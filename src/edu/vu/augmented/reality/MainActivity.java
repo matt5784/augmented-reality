@@ -1,16 +1,20 @@
 package edu.vu.augmented.reality;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -25,7 +29,15 @@ public class MainActivity extends Activity {
 	        
 	        // Create an instance of Camera
 	        mCamera = getCameraInstance();
-	
+	        Camera.Parameters cp = mCamera.getParameters();
+	        List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
+	        /*for (int i = 0; i < sizes.size(); i++){
+		        Toast.makeText(getApplicationContext(), "height " + i + ": "+cp.getPreviewSize().height+"", Toast.LENGTH_SHORT).show();
+		        Toast.makeText(getApplicationContext(), "width " + i + ": " +cp.getPreviewSize().width+"", Toast.LENGTH_SHORT).show();
+	        }*/
+	        cp.setPreviewSize(sizes.get(sizes.size()-1).width, sizes.get(sizes.size()-1).height);
+	        mCamera.setParameters(cp);
+	        
 	        // Create our Preview view and set it as the content of our activity.
 	        mPreview = new CameraPreview(this, mCamera);
 	        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
@@ -50,7 +62,18 @@ public class MainActivity extends Activity {
 	        setContentView(errorView);
         }
     }
+    
+    @Override
+    public void onPause(){
+    	mCamera.release();
+    }
+    
+    /*@Override
+    public void onResume(){
+    	mCamera = getCameraInstance();
+    }*/
 
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
