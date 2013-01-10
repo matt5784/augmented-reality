@@ -74,13 +74,21 @@ public class MainActivity extends Activity {
     }*/
 
     
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
     
-    private boolean checkCameraHardware(Context context) {
+    @Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		mCamera.release();
+	}
+
+	private boolean checkCameraHardware(Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
             return true;
         } else {
@@ -99,4 +107,6 @@ public class MainActivity extends Activity {
         }
         return c; // returns null if camera is unavailable
     }
+    
+    
 }
