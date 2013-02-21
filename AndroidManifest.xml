@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.vu.augmented.reality.LinkedinExample"
+            android:name="edu.vu.augmented.reality.Init"
             android:launchMode="singleTop"
             >
             <intent-filter>

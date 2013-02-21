@@ -33,7 +33,7 @@ public class Menu extends Activity implements OnClickListener  {
 		case R.id.button1:
 			try {
 				Intent ourIntent;
-				ourIntent = new Intent(Menu.this, Class.forName("edu.vu.augmented.reality.LinkedinExample"));
+				ourIntent = new Intent(Menu.this, Class.forName("edu.vu.augmented.reality.linkedin.Init"));
 				startActivity(ourIntent);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
