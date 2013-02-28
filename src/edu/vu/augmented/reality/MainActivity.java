@@ -28,11 +28,15 @@ public class MainActivity extends Activity {
     
     @Override
     public void onPause(){
-        mCamera.release();
+    	super.onPause();
+    	if (mCamera != null){
+    		mCamera.release();
+    	}
     }
     
     @Override
     public void onResume(){
+    	super.onResume();
         if (checkCameraHardware(this)){
             setContentView(R.layout.activity_main);
             
