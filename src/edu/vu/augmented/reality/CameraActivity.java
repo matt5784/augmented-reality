@@ -1,14 +1,21 @@
 package edu.vu.augmented.reality;
 
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -16,10 +23,13 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class CameraActivity extends Activity {
 
     private Camera mCamera;
     private CameraPreview mPreview;
+    private byte[] pictureData;
+    
+    private Timer cameraTimer;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +39,9 @@ public class MainActivity extends Activity {
     @Override
     public void onPause(){
     	super.onPause();
+    	
+    	cameraTimer.cancel();
+    	
     	if (mCamera != null){
     		mCamera.release();
     	}
@@ -38,7 +51,7 @@ public class MainActivity extends Activity {
     public void onResume(){
     	super.onResume();
         if (checkCameraHardware(this)){
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_camera);
             
             // Create an instance of Camera
             mCamera = getCameraInstance();
@@ -56,6 +69,15 @@ public class MainActivity extends Activity {
             mPreview = new CameraPreview(this, mCamera);
             FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
             preview.addView(mPreview,0);
+            
+            cameraTimer = new Timer();
+            cameraTimer.schedule(new TimerTask() {			
+    			public void run() {
+    				mCamera.takePicture(null, null, mPicture);
+    				//Bitmap myBitmap = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
+    			}
+    		}, 0, 3000);
+            
         } else {
             showErrorView();
         }
@@ -106,4 +128,14 @@ public class MainActivity extends Activity {
         }
         return c; // returns null if camera is unavailable
     }
+    
+    private PictureCallback mPicture = new PictureCallback() {
+
+		@Override
+		public void onPictureTaken(byte[] data, Camera camera) {
+			//pictureData = data;
+			Log.d("augmented-reality", "Num bytes in pic: " + Integer.toString(data.length));
+		}
+    	
+    };
 }

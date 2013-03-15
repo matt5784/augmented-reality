@@ -28,7 +28,7 @@ public class Launcher extends Activity {
         gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 switch (position){
-                case 0: startActivity(new Intent(getApplicationContext(), MainActivity.class)); break;
+                case 0: startActivity(new Intent(getApplicationContext(), CameraActivity.class)); break;
                 case 1: break;
                 case 2: break;
                 }
