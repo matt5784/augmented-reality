@@ -131,19 +131,21 @@ public class Init extends Activity {
 			});
 			webView.loadUrl(authURL);
 
-		} else {
-			//The user already has an authenication token
-			//Create the client
-			String token = mPrefs.getString("Token", "Error");
-			String secret = mPrefs.getString("Secret", "Error");
-			
-			
-			
-		}
-		Intent i = new Intent(Init.this, Class.forName("edu.vu.augmented.reality.linkedin.Interface"))
+		} 
 		
-		i.putExtra("Token", accessToken.getToken());
-		i.putExtra("Secret", accessToken.getSecret());
+		Intent i;
+		
+		try {
+			i = new Intent(Init.this, Class.forName("edu.vu.augmented.reality.linkedin.Interface"));
+			i.putExtra("Token", accessToken.getToken());
+			i.putExtra("Secret", accessToken.getSecret());
+			startActivity(i);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 	
