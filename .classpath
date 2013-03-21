@@ -4,8 +4,12 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="C:/Users/rdnew_000/git/augmented-reality/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rdnew_000/git/augmented-reality/linkedin-j-android.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rdnew_000/git/augmented-reality/libs/socialauth-android.jar"/>
+	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="libs/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="libs/linkedin-j-android.jar"/>
+	<classpathentry kind="lib" path="libs/scribe-1.3.0.jar"/>
+	<classpathentry kind="lib" path="libs/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/socialauth-2.3.jar"/>
+	<classpathentry kind="lib" path="libs/socialauth-android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -41,6 +41,7 @@ public class CameraActivity extends Activity {
     	super.onPause();
     	
     	cameraTimer.cancel();
+    	cameraTimer.purge();
     	
     	if (mCamera != null){
     		mCamera.release();
@@ -71,12 +72,13 @@ public class CameraActivity extends Activity {
             preview.addView(mPreview,0);
             
             cameraTimer = new Timer();
-            cameraTimer.schedule(new TimerTask() {			
+            cameraTimer.scheduleAtFixedRate(new TimerTask() {			
     			public void run() {
     				mCamera.takePicture(null, null, mPicture);
+    				mCamera.startPreview();
     				//Bitmap myBitmap = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
     			}
-    		}, 0, 3000);
+    		}, 7000, 7000);
             
         } else {
             showErrorView();
@@ -133,7 +135,7 @@ public class CameraActivity extends Activity {
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			//pictureData = data;
+			Toast.makeText(getApplicationContext(), "Bytes: " + Integer.toString(data.length), Toast.LENGTH_SHORT).show();
 			Log.d("augmented-reality", "Num bytes in pic: " + Integer.toString(data.length));
 		}
     	
