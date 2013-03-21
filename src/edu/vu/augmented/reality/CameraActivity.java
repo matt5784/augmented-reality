@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.googlecode.tesseract.android.TessBaseAPI;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -25,11 +27,16 @@ import android.widget.Toast;
 
 public class CameraActivity extends Activity {
 
+	private static String LOGTAG = "augmented-reality";
     private Camera mCamera;
     private CameraPreview mPreview;
     private byte[] pictureData;
     
     private Timer cameraTimer;
+    
+    private TessBaseAPI tess;
+    private CardParser parser;
+    
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,8 @@ public class CameraActivity extends Activity {
     @Override
     public void onPause(){
     	super.onPause();
+    	
+    	tess.end();
     	
     	cameraTimer.cancel();
     	cameraTimer.purge();
@@ -71,12 +80,17 @@ public class CameraActivity extends Activity {
             FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
             preview.addView(mPreview,0);
             
+            // Make a Tesseract object and parser
+            tess = new TessBaseAPI();
+            tess.init(getDir("augmented-reality", MODE_PRIVATE).toString(), "eng");
+            Log.d(LOGTAG, "Tesseract initialized");
+            parser = new CardParser();
+            
             cameraTimer = new Timer();
             cameraTimer.scheduleAtFixedRate(new TimerTask() {			
     			public void run() {
     				mCamera.takePicture(null, null, mPicture);
     				mCamera.startPreview();
-    				//Bitmap myBitmap = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
     			}
     		}, 7000, 7000);
             
@@ -135,8 +149,18 @@ public class CameraActivity extends Activity {
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			Toast.makeText(getApplicationContext(), "Bytes: " + Integer.toString(data.length), Toast.LENGTH_SHORT).show();
-			Log.d("augmented-reality", "Num bytes in pic: " + Integer.toString(data.length));
+			//Toast.makeText(getApplicationContext(), "Bytes: " + Integer.toString(data.length), Toast.LENGTH_SHORT).show();
+			
+			pictureData = data;
+			Bitmap myBitmap = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
+			tess.clear();
+			tess.setImage(myBitmap);
+			String textOnCard = tess.getUTF8Text();
+			//parser.setText(textOnCard);
+			//String textEmail = parser.getEmail();
+			//String textPhone = parser.getPhone();
+			//String textWeb = parser.getURL();
+			//Toast.makeText(getApplicationContext(), "Email: " + textEmail + "\nPhone: " + textPhone + "\nWeb: " + textWeb, Toast.LENGTH_SHORT).show();
 		}
     	
     };

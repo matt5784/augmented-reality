@@ -46,9 +46,6 @@ public class Launcher extends Activity {
         });
         
         loadTesseractData();
-        //TessBaseAPI baseApi = new TessBaseAPI();
-        //baseApi.init(getDir("augmented-reality", MODE_PRIVATE).toString(), "eng");
-        //Log.d(LOGTAG, "Tesseract initialized");
 
     }
 
