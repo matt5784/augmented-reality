@@ -149,18 +149,24 @@ public class CameraActivity extends Activity {
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			//Toast.makeText(getApplicationContext(), "Bytes: " + Integer.toString(data.length), Toast.LENGTH_SHORT).show();
 			
 			pictureData = data;
-			Bitmap myBitmap = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
+			
+			//BitmapFactory.Options bitmapConfig = new BitmapFactory.Options();
+			//bitmapConfig.inPreferredConfig = Bitmap.Config.ARGB_8888;
+			
+			Bitmap unconvertedBitmap = BitmapFactory.decodeByteArray(pictureData, 0, pictureData.length);
+			Bitmap myBitmap = unconvertedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+			
 			tess.clear();
 			tess.setImage(myBitmap);
 			String textOnCard = tess.getUTF8Text();
-			//parser.setText(textOnCard);
-			//String textEmail = parser.getEmail();
-			//String textPhone = parser.getPhone();
-			//String textWeb = parser.getURL();
+			parser.setText(textOnCard);
+			String textEmail = parser.getEmail();
+			String textPhone = parser.getPhone();
+			String textWeb = parser.getURL();
 			//Toast.makeText(getApplicationContext(), "Email: " + textEmail + "\nPhone: " + textPhone + "\nWeb: " + textWeb, Toast.LENGTH_SHORT).show();
+			Log.d(LOGTAG, "Email: " + textEmail + "\nPhone: " + textPhone + "\nWeb: " + textWeb);
 		}
     	
     };
