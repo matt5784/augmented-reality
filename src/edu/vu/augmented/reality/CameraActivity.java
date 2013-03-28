@@ -101,9 +101,12 @@ public class CameraActivity extends Activity {
 
 			// Make a Tesseract object and parser
 			tess = new TessBaseAPI();
-			tess.init(getDir("augmented-reality", MODE_PRIVATE).toString(),
-					"eng");
-			Log.d(LOGTAG, "Tesseract initialized");
+			if (!tess.init(getDir("ar", MODE_PRIVATE).toString(), "eng")) {
+				Log.d(LOGTAG, "Tesseract not initialized successfully");
+			}
+			else {
+				Log.d(LOGTAG, "Tesseract initialized");
+			}
 			parser = new CardParser();
 
 		} else {
@@ -163,18 +166,13 @@ public class CameraActivity extends Activity {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 
-			pictureData = data;
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+			options.inSampleSize = 4;
 
-			// BitmapFactory.Options bitmapConfig = new BitmapFactory.Options();
-			// bitmapConfig.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
+			Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 			
-			//We now face an out of memory exception - Robert 
-			Bitmap unconvertedBitmap = BitmapFactory.decodeByteArray(
-					pictureData, 0, pictureData.length);
-
-			Bitmap myBitmap = unconvertedBitmap.copy(Bitmap.Config.ARGB_8888,
-					true);
+			//Bitmap myBitmap = unconvertedBitmap.copy(Bitmap.Config.ARGB_8888,	true);
 
 			tess.clear();
 			tess.setImage(myBitmap);
