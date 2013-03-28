@@ -4,21 +4,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
-    
+
     <FrameLayout
-      android:id="@+id/camera_preview"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:layout_weight="1"
-      android:background="#FF8090A0" >
-      
-        <LinearLayout android:layout_width="fill_parent"
-          android:layout_height="fill_parent" 
-          android:orientation="horizontal" >
-          
-            <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:text="This is an overlay"
-              android:textSize="25dp" android:textColor="#ff0000" />
-	    </LinearLayout>
+        android:id="@+id/camera_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:background="#FF8090A0" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is an overlay"
+                android:textColor="#ff0000"
+                android:textSize="25dp" />
+
+            <Button
+                android:id="@+id/img_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capture" />
+        </LinearLayout>
     </FrameLayout>
+
 </LinearLayout>
