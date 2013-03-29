@@ -101,7 +101,7 @@ public class CameraActivity extends Activity {
 
 			// Make a Tesseract object and parser
 			tess = new TessBaseAPI();
-			if (!tess.init(getDir("ar", MODE_PRIVATE).toString(), "eng")) {
+			if (!tess.init(getDir("augmented-reality", MODE_PRIVATE).toString(), "eng")) {
 				Log.d(LOGTAG, "Tesseract not initialized successfully");
 			}
 			else {
