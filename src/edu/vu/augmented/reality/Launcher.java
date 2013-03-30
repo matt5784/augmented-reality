@@ -2,6 +2,7 @@ package edu.vu.augmented.reality;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -11,7 +12,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +49,14 @@ public class Launcher extends Activity {
         });
         
         loadTesseractData();
+        /*
+        TessBaseAPI tess = new TessBaseAPI();
+        File sdCard = getExternalFilesDir(Environment.MEDIA_MOUNTED);
+		if (tess.init(sdCard.toString(), "eng")) {
+			
+			Log.d(LOGTAG, "TESSERACT INITIALIZED YAYAYAYYAYAYAYY");
+		}
+		*/
 
     }
 
@@ -97,10 +108,13 @@ public class Launcher extends Activity {
         };
     }
     
-public boolean loadTesseractData() {
+    public boolean loadTesseractData() {
     	
-    	File base = getDir("augmented-reality", MODE_PRIVATE);
-    	File tessFolder = new File(base.getAbsolutePath() + "/tessdata/");
+		File sdCard = getExternalFilesDir(Environment.MEDIA_MOUNTED);
+		File tessFolder = new File(sdCard.getAbsolutePath() + File.separator + "tessdata");
+		
+    	//File base = getDir("augmented-reality", MODE_WORLD_READABLE);
+    	//File tessFolder = new File(base.getAbsolutePath() + "/tessdata/");
     	
     	if (!tessFolder.exists()) {
     		
@@ -111,16 +125,16 @@ public boolean loadTesseractData() {
     		}
     	}
     	
-    	File tessData = new File(tessFolder.getAbsolutePath() + "/eng.traineddata");
-    	if (!tessData.exists()) {
+    	File tessData = new File(tessFolder.getAbsolutePath() + File.separator + "eng.traineddata");
+    	if (!tessData.exists() || tessData.length() <= 0) {
     		
     		try {
     			
     			AssetManager assetManager = getAssets();
-    			InputStream in = assetManager.open("tessdata/eng.traineddata");
+    			InputStream in = assetManager.open("tessdata" + File.separator + "eng_traineddata.mp3");
     			OutputStream out = new FileOutputStream(tessData.getAbsoluteFile());
     			
-    			byte buf[] = new byte[1024];
+    			byte buf[] = new byte[512];
     			int bytesRead = in.read(buf);
     			while (bytesRead > 0) {
     				
@@ -134,7 +148,7 @@ public boolean loadTesseractData() {
     		} catch (Exception e) {
     			
     			Log.e(LOGTAG, "Unable to store tesseract training data; error below");
-    			Log.e(LOGTAG, e.getMessage());
+    			Log.e(LOGTAG, e.getLocalizedMessage());
     			return false;
     		}
     	}

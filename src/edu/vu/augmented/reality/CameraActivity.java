@@ -16,6 +16,7 @@ import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -101,7 +102,7 @@ public class CameraActivity extends Activity {
 
 			// Make a Tesseract object and parser
 			tess = new TessBaseAPI();
-			if (!tess.init(getDir("augmented-reality", MODE_PRIVATE).toString(), "eng")) {
+			if (!tess.init(getExternalFilesDir(Environment.MEDIA_MOUNTED).getAbsolutePath(), "eng")) {
 				Log.d(LOGTAG, "Tesseract not initialized successfully");
 			}
 			else {
@@ -181,9 +182,10 @@ public class CameraActivity extends Activity {
 			String textEmail = parser.getEmail();
 			String textPhone = parser.getPhone();
 			String textWeb = parser.getURL();
-			// Toast.makeText(getApplicationContext(), "Email: " + textEmail +
-			// "\nPhone: " + textPhone + "\nWeb: " + textWeb,
-			// Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Email: " + textEmail +
+			 "\nPhone: " + textPhone + "\nWeb: " + textWeb,
+			 Toast.LENGTH_SHORT).show();
+			Log.d(LOGTAG, textOnCard);
 			Log.d(LOGTAG, "Email: " + textEmail + "\nPhone: " + textPhone
 					+ "\nWeb: " + textWeb);
 		}
