@@ -46,6 +46,7 @@ public class Init extends Activity {
 	private final static String APIKEY = "dj4b9ihlwnkv";
 	// DO NOT CHANGE
 	private final static String APISECRET = "R3aCuzr0NPTmdfkq";
+	
 	final static String CALLBACK = "oauth://linkedin";
 	static Token accessToken = null;
 	final LinkedInOAuthService oAuthService = LinkedInOAuthServiceFactory
@@ -64,7 +65,6 @@ public class Init extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.linkedin);
 
-		final TextView textView = (TextView) findViewById(R.id.tv1);
 		final WebView webView = (WebView) findViewById(R.id.wv1);
 
 		// We should check to see if the user is already logged in, so
