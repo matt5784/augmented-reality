@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ public class CameraActivity extends Activity {
 	private CardParser parser;
 
 	private Button img_cap;
+	private LinearLayout lin_lay;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class CameraActivity extends Activity {
 		super.onPause();
 
 		tess.end();
-		
+
 		if (cameraTimer != null) {
 			cameraTimer.cancel();
 			cameraTimer.purge();
@@ -75,9 +79,23 @@ public class CameraActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					mCamera.takePicture(null, null, mPicture);
-    				mCamera.startPreview();
+					mCamera.startPreview();
 
 				}
+			});
+
+			//When the user clicks the background this causes the 
+			//preview to autofocus
+			lin_lay = (LinearLayout) findViewById(R.id.background);
+			lin_lay.setOnClickListener(new LinearLayout.OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					img_cap.setEnabled(false);
+					mCamera.autoFocus(myAutoFocusCallback);
+
+				}
+
 			});
 
 			// Create an instance of Camera
@@ -88,11 +106,9 @@ public class CameraActivity extends Activity {
 				showErrorView();
 				return;
 			}
-			Camera.Parameters cp = mCamera.getParameters();
-			List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
-			cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
-					sizes.get(sizes.size() - 1).height);
-			mCamera.setParameters(cp);
+
+			// set camera params
+			setCameraParams();
 
 			// Create our Preview view and set it as the content of our
 			// activity.
@@ -102,10 +118,10 @@ public class CameraActivity extends Activity {
 
 			// Make a Tesseract object and parser
 			tess = new TessBaseAPI();
-			if (!tess.init(getExternalFilesDir(Environment.MEDIA_MOUNTED).getAbsolutePath(), "eng")) {
+			if (!tess.init(getExternalFilesDir(Environment.MEDIA_MOUNTED)
+					.getAbsolutePath(), "eng")) {
 				Log.d(LOGTAG, "Tesseract not initialized successfully");
-			}
-			else {
+			} else {
 				Log.d(LOGTAG, "Tesseract initialized");
 			}
 			parser = new CardParser();
@@ -113,6 +129,26 @@ public class CameraActivity extends Activity {
 		} else {
 			showErrorView();
 		}
+	}
+
+	AutoFocusCallback myAutoFocusCallback = new AutoFocusCallback() {
+
+		@Override
+		public void onAutoFocus(boolean arg0, Camera arg1) {
+			img_cap.setEnabled(true);
+		}
+
+	};
+
+	private void setCameraParams() {
+		// set our camera parameters
+		Camera.Parameters cp = mCamera.getParameters();
+		List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
+		cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
+				sizes.get(sizes.size() - 1).height);
+		cp.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+		cp.setFlashMode(Parameters.FLASH_MODE_AUTO);
+		mCamera.setParameters(cp);
 	}
 
 	@Override
@@ -171,9 +207,8 @@ public class CameraActivity extends Activity {
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 			options.inSampleSize = 4;
 
-			Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-			
-			//Bitmap myBitmap = unconvertedBitmap.copy(Bitmap.Config.ARGB_8888,	true);
+			Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0,
+					data.length, options);
 
 			tess.clear();
 			tess.setImage(myBitmap);
@@ -182,12 +217,16 @@ public class CameraActivity extends Activity {
 			String textEmail = parser.getEmail();
 			String textPhone = parser.getPhone();
 			String textWeb = parser.getURL();
-			Toast.makeText(getApplicationContext(), "Email: " + textEmail +
-			 "\nPhone: " + textPhone + "\nWeb: " + textWeb,
-			 Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), textOnCard,
+					Toast.LENGTH_SHORT);
+			Toast.makeText(
+					getApplicationContext(),
+					"Email: " + textEmail + "\nPhone: " + textPhone + "\nWeb: "
+							+ textWeb, Toast.LENGTH_SHORT).show();
 			Log.d(LOGTAG, textOnCard);
 			Log.d(LOGTAG, "Email: " + textEmail + "\nPhone: " + textPhone
 					+ "\nWeb: " + textWeb);
+			mCamera.startPreview(); // added to start previewing again
 		}
 
 	};
