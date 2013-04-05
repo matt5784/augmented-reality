@@ -38,6 +38,7 @@ public class CameraActivity extends Activity {
 
 	private TessBaseAPI tess;
 	private CardParser parser;
+	private DatabaseHandler databaseHandler;
 
 	private Button img_cap;
 
@@ -109,6 +110,9 @@ public class CameraActivity extends Activity {
 				Log.d(LOGTAG, "Tesseract initialized");
 			}
 			parser = new CardParser();
+			
+			// Now make connection to database
+			databaseHandler = new DatabaseHandler(this);
 
 		} else {
 			showErrorView();
@@ -182,12 +186,15 @@ public class CameraActivity extends Activity {
 			String textEmail = parser.getEmail();
 			String textPhone = parser.getPhone();
 			String textWeb = parser.getURL();
+			String textName = parser.getPersonName();
 			Toast.makeText(getApplicationContext(), "Email: " + textEmail +
-			 "\nPhone: " + textPhone + "\nWeb: " + textWeb,
+			 "\nPhone: " + textPhone + "\nWeb: " + textWeb + "\nName: " + textName,
 			 Toast.LENGTH_SHORT).show();
 			Log.d(LOGTAG, textOnCard);
 			Log.d(LOGTAG, "Email: " + textEmail + "\nPhone: " + textPhone
 					+ "\nWeb: " + textWeb);
+			
+			databaseHandler.addContact(new Contact(textName, textPhone, textEmail, textWeb));
 		}
 
 	};

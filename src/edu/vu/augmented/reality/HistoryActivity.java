@@ -1,5 +1,7 @@
 package edu.vu.augmented.reality;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
@@ -8,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class HistoryActivity extends Activity {
+	
+	private int numCardsToDisplay = 5;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,12 +20,23 @@ public class HistoryActivity extends Activity {
 		
 		LinearLayout baseLayout = (LinearLayout)findViewById(R.id.activity_history_layout);
 		
-		// Add text views that show the info from past cards
-		TextView tv = new TextView(getApplicationContext());
-		tv.setTextColor(Color.BLACK);
-		tv.setText("Name: Ryan Testing\nEmail: this.is.test@vanderbilt.edu\nPhone: 615-555-4432");
-		baseLayout.addView(tv);
+		DatabaseHandler databaseHandler = new DatabaseHandler(this);
+		List<Contact> cl = databaseHandler.getNContacts(numCardsToDisplay);
 		
+		// Add text views that show the info from past cards
+		for (int i = 0; i < numCardsToDisplay; ++i) {
+			
+			if (cl.size() >= i)
+				break;
+			
+			TextView tv = new TextView(this);
+			tv.setTextColor(Color.BLUE);
+			tv.setText("Name: " + cl.get(i).getName() +
+					"\nPhone: " + cl.get(i).getPhoneNumber() +
+					"\nEmail: " + cl.get(i).getEmailAddress() +
+					"\nWeb: " + cl.get(i).getWebAddress());
+			baseLayout.addView(tv);
+		}
 	}
 
 	@Override
