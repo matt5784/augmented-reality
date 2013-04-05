@@ -62,10 +62,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     	SQLiteDatabase db = this.getWritableDatabase();
     	 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, contact.getName());
-        values.put(KEY_PH_NO, contact.getPhoneNumber());
-        values.put(KEY_EMAIL, contact.getEmailAddress());
-        values.put(KEY_WEB, contact.getWebAddress());
+        
+        // Name
+        if (!(contact.getName() == ""))
+        	values.put(KEY_NAME, contact.getName());
+        else
+        	values.put(KEY_NAME, "-not available-");
+        
+        // Phone number
+        if (!(contact.getPhoneNumber() == ""))
+        	values.put(KEY_PH_NO, contact.getPhoneNumber());
+        else
+        	values.put(KEY_PH_NO, "-not available-");
+        
+        // Email
+        if (!(contact.getEmailAddress() == ""))
+        	values.put(KEY_EMAIL, contact.getEmailAddress());
+        else
+        	values.put(KEY_EMAIL, "-not available-");
+        
+        // Web address
+        if (!(contact.getWebAddress() == ""))
+        	values.put(KEY_WEB, contact.getWebAddress());
+        else
+        	values.put(KEY_WEB, "-not available-");
      
         // Inserting Row
         db.insert(TABLE_CONTACTS, null, values);
@@ -123,7 +143,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Contact> getNContacts(int n) {
     	
     	List<Contact> contactList = new ArrayList<Contact>();
-        String selectQuery = "SELECT TOP " + Integer.toString(n) + " * FROM " + TABLE_CONTACTS;
+        //String selectQuery = "SELECT TOP " + Integer.toString(n) + " * FROM " + TABLE_CONTACTS;
+    	String selectQuery = "SELECT * FROM " + TABLE_CONTACTS + 
+    			" ORDER BY " + KEY_ID + " DESC LIMIT 0," + Integer.toString(n);
         
         if (n <= 0)
         	return contactList;

@@ -93,6 +93,7 @@ public class CameraActivity extends Activity {
 			List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
 			cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
 					sizes.get(sizes.size() - 1).height);
+			cp.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
 			mCamera.setParameters(cp);
 
 			// Create our Preview view and set it as the content of our
@@ -173,7 +174,7 @@ public class CameraActivity extends Activity {
 
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-			options.inSampleSize = 4;
+			options.inSampleSize = 2;
 
 			Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 			

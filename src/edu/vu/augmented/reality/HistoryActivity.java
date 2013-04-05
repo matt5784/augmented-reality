@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.view.Menu;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HistoryActivity extends Activity {
 	
@@ -22,19 +23,28 @@ public class HistoryActivity extends Activity {
 		
 		DatabaseHandler databaseHandler = new DatabaseHandler(this);
 		List<Contact> cl = databaseHandler.getNContacts(numCardsToDisplay);
+		//List<Contact> cl = databaseHandler.getAllContacts();
+		
+		Toast.makeText(this, "Entries: " + Integer.toString(databaseHandler.getContactsCount()), Toast.LENGTH_SHORT).show();
 		
 		// Add text views that show the info from past cards
 		for (int i = 0; i < numCardsToDisplay; ++i) {
 			
-			if (cl.size() >= i)
+			if (cl.size() <= i)
 				break;
 			
 			TextView tv = new TextView(this);
-			tv.setTextColor(Color.BLUE);
+			if (i % 2 == 0)
+				tv.setBackgroundColor(Color.parseColor("#8BD1FF"));
+			else
+				tv.setBackgroundColor(Color.parseColor("#B9F9CE"));
+			tv.setTextColor(Color.BLACK);
+			tv.setPadding(0, 10, 0, 10);
 			tv.setText("Name: " + cl.get(i).getName() +
 					"\nPhone: " + cl.get(i).getPhoneNumber() +
 					"\nEmail: " + cl.get(i).getEmailAddress() +
-					"\nWeb: " + cl.get(i).getWebAddress());
+					"\nWeb: " + cl.get(i).getWebAddress() +
+					"\nID(testing): " + cl.get(i).getID());
 			baseLayout.addView(tv);
 		}
 	}
