@@ -56,6 +56,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
     
+    // Delete all contacts
+    public void deleteAll()
+    {
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	this.onUpgrade(db, DATABASE_VERSION, DATABASE_VERSION);
+    }
+    
     // Add a new contact to database
     public void addContact(Contact contact) {
     	
@@ -140,7 +147,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     
     // Get last #n contacts
-    public List<Contact> getNContacts(int n) {
+    public List<Contact> getLastNContacts(int n) {
     	
     	List<Contact> contactList = new ArrayList<Contact>();
         //String selectQuery = "SELECT TOP " + Integer.toString(n) + " * FROM " + TABLE_CONTACTS;
