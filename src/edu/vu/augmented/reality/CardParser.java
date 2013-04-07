@@ -16,6 +16,9 @@ public class CardParser {
 
 	private String myRegexPhone = "[\\(]?\\d{3,3}[\\)]?[\\. -]?\\d{3,3}[\\. -]?\\d{4,4}";
 	
+	private String regexPersonName = "[a-zA-Z]{2,}[ ]*[a-zA-Z]{2,}";
+	private String regexPersonName2 = "[a-zA-Z]+(([\\'\\,\\.\\- ][a-zA-Z ])?[a-zA-Z]*)*";
+	
 	// Makes sure valid area code (lowest is 200)
 	private String regexPhone = "(\\([2-9]|[2-9])(\\d{2}|\\d{2}\\))(-|.|\\s)?\\d{3}(-|.|\\s)?\\d{4}";
 	
@@ -47,6 +50,12 @@ public class CardParser {
 	public String getPhone(){
 		
 		return getPattern(myRegexPhone);
+	}
+	
+	// Returns a person's name
+	public String getPersonName(){
+			
+		return getPattern(regexPersonName2);
 	}
 	
 	// Returns the first occurrence of a particular regular expression match or "" if not found

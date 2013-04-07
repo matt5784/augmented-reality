@@ -38,6 +38,7 @@ public class CameraActivity extends Activity {
 
 	private TessBaseAPI tess;
 	private CardParser parser;
+	private DatabaseHandler databaseHandler;
 
 	private Button img_cap;
 
@@ -92,6 +93,7 @@ public class CameraActivity extends Activity {
 			List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
 			cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
 					sizes.get(sizes.size() - 1).height);
+			cp.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
 			mCamera.setParameters(cp);
 
 			// Create our Preview view and set it as the content of our
@@ -109,6 +111,9 @@ public class CameraActivity extends Activity {
 				Log.d(LOGTAG, "Tesseract initialized");
 			}
 			parser = new CardParser();
+			
+			// Now make connection to database
+			databaseHandler = new DatabaseHandler(this);
 
 		} else {
 			showErrorView();
@@ -169,7 +174,7 @@ public class CameraActivity extends Activity {
 
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-			options.inSampleSize = 4;
+			options.inSampleSize = 2;
 
 			Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 			
@@ -182,12 +187,15 @@ public class CameraActivity extends Activity {
 			String textEmail = parser.getEmail();
 			String textPhone = parser.getPhone();
 			String textWeb = parser.getURL();
+			String textName = parser.getPersonName();
 			Toast.makeText(getApplicationContext(), "Email: " + textEmail +
-			 "\nPhone: " + textPhone + "\nWeb: " + textWeb,
+			 "\nPhone: " + textPhone + "\nWeb: " + textWeb + "\nName: " + textName,
 			 Toast.LENGTH_SHORT).show();
 			Log.d(LOGTAG, textOnCard);
 			Log.d(LOGTAG, "Email: " + textEmail + "\nPhone: " + textPhone
 					+ "\nWeb: " + textWeb);
+			
+			databaseHandler.addContact(new Contact(textName, textPhone, textEmail, textWeb));
 		}
 
 	};

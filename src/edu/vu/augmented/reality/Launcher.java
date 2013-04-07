@@ -42,21 +42,13 @@ public class Launcher extends Activity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 switch (position){
                 case 0: startActivity(new Intent(getApplicationContext(), CameraActivity.class)); break;
-                case 1: break;
+                case 1: startActivity(new Intent(getApplicationContext(), HistoryActivity.class)); break;
                 case 2: break;
                 }
             }
         });
         
         loadTesseractData();
-        /*
-        TessBaseAPI tess = new TessBaseAPI();
-        File sdCard = getExternalFilesDir(Environment.MEDIA_MOUNTED);
-		if (tess.init(sdCard.toString(), "eng")) {
-			
-			Log.d(LOGTAG, "TESSERACT INITIALIZED YAYAYAYYAYAYAYY");
-		}
-		*/
 
     }
 
