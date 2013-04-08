@@ -11,13 +11,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
-import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientFactory;
 import com.google.code.linkedinapi.client.oauth.LinkedInOAuthService;
 import com.google.code.linkedinapi.client.oauth.LinkedInOAuthServiceFactory;
@@ -46,24 +45,27 @@ public class Init extends Activity {
 	private final static String APIKEY = "dj4b9ihlwnkv";
 	// DO NOT CHANGE
 	private final static String APISECRET = "R3aCuzr0NPTmdfkq";
-	
+
 	final static String CALLBACK = "oauth://linkedin";
 	static Token accessToken = null;
 	final LinkedInOAuthService oAuthService = LinkedInOAuthServiceFactory
 			.getInstance().createLinkedInOAuthService(APIKEY, APISECRET);
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
 			.newInstance(APIKEY, APISECRET);
-	private static LinkedInApiClient client;
 	LinkedInRequestToken liToken;
 
 	private SharedPreferences mPrefs;
-	
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.linkedin);
+
+		// This is a fix to allow network code to run on the main thread
+		// The code to authenticate should be placed inside an AsyncTask
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 
 		final WebView webView = (WebView) findViewById(R.id.wv1);
 
@@ -71,8 +73,13 @@ public class Init extends Activity {
 		// that we don't always have to load the webview
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean prefToken = mPrefs.getBoolean("AccessToken", false);
+		
+		//Grab the name from the intent passed in by HistoryActivity
+		Intent fromHistoryActivity = getIntent();
+		final String name = fromHistoryActivity.getStringExtra("Name");
 
 		if (!prefToken) {
+
 			// used to build our OAuthService
 			final OAuthService s = new ServiceBuilder()
 					.provider(LinkedInApi.class).apiKey(APIKEY)
@@ -114,16 +121,25 @@ public class Init extends Activity {
 						editor.putString("Secret", accessToken.getSecret());
 						editor.commit();
 
-						if (uri.getHost().equals("linkedin")) {
-							// We have to use the access token created from
-							// scribe on our linkedin-j
-							// scribe does not provide any methods other than
-							// authentication. So
-							// we use the parameters from the access token to
-							// create a linkedin-j client
-							
+						Intent i;
 
+						try {
+							i = new Intent(
+									Init.this,
+									Class.forName("edu.vu.augmented.reality.linkedin.Interface"));
+							String tok = mPrefs.getString("Token", "null");
+							String sec = mPrefs.getString("Secret", "null");
+							if (tok != null && sec != null) {
+								i.putExtra("Token", tok);
+								i.putExtra("Secret", sec);
+								i.putExtra("Name", name);
+								startActivity(i);
+							}
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
+
 						return true;
 					}
 					return super.shouldOverrideUrlLoading(view, url);
@@ -131,24 +147,28 @@ public class Init extends Activity {
 			});
 			webView.loadUrl(authURL);
 
-		} 
-		
-		Intent i;
-		
-		try {
-			i = new Intent(Init.this, Class.forName("edu.vu.augmented.reality.linkedin.Interface"));
-			i.putExtra("Token", accessToken.getToken());
-			i.putExtra("Secret", accessToken.getSecret());
-			startActivity(i);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			Intent i;
+
+			try {
+				i = new Intent(
+						Init.this,
+						Class.forName("edu.vu.augmented.reality.linkedin.Interface"));
+				String tok = mPrefs.getString("Token", "null");
+				String sec = mPrefs.getString("Secret", "null");
+				if (tok != null && sec != null) {
+					i.putExtra("Token", tok);
+					i.putExtra("Secret", sec);
+					i.putExtra("Name", name);
+					startActivity(i);
+				}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		
-		
-		
+
 	}
-	
-	
 
 }

@@ -5,11 +5,13 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -37,6 +39,18 @@
         <activity
             android:name="edu.vu.augmented.reality.HistoryActivity"
             android:label="@string/title_activity_history" >
+        </activity>
+        <activity android:name="edu.vu.augmented.reality.linkedin.Init" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="oauth-testing" />
+            </intent-filter>
+        </activity>
+        <activity android:name="edu.vu.augmented.reality.linkedin.Interface" >
         </activity>
     </application>
 

@@ -89,12 +89,9 @@ public class CameraActivity extends Activity {
 				showErrorView();
 				return;
 			}
-			Camera.Parameters cp = mCamera.getParameters();
-			List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
-			cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
-					sizes.get(sizes.size() - 1).height);
-			cp.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-			mCamera.setParameters(cp);
+			
+			//set camera parameters
+			setCameraParams();
 
 			// Create our Preview view and set it as the content of our
 			// activity.
@@ -118,6 +115,15 @@ public class CameraActivity extends Activity {
 		} else {
 			showErrorView();
 		}
+	}
+	
+	private void setCameraParams() {
+		Camera.Parameters cp = mCamera.getParameters();
+		List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
+		cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
+				sizes.get(sizes.size() - 1).height);
+		cp.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+		mCamera.setParameters(cp);
 	}
 
 	@Override
@@ -196,6 +202,8 @@ public class CameraActivity extends Activity {
 					+ "\nWeb: " + textWeb);
 			
 			databaseHandler.addContact(new Contact(textName, textPhone, textEmail, textWeb));
+			
+			mCamera.startPreview(); //restart the preview
 		}
 
 	};
