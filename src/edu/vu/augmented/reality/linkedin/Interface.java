@@ -30,6 +30,7 @@ public class Interface extends Activity {
 
 		Intent intentFromInit = getIntent();
 
+		//All of these extras come from Init
 		sec = intentFromInit.getStringExtra("Secret");
 		tok = intentFromInit.getStringExtra("Token");
 		name = intentFromInit.getStringExtra("Name");

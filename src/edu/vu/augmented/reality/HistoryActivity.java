@@ -88,8 +88,8 @@ public class HistoryActivity extends Activity {
 														HistoryActivity.this,
 														Class.forName("edu.vu.augmented.reality.linkedin.Init"));
 
-												myIntent.putExtra("Name",
-														cl.get(temp).getName());
+												myIntent.putExtra("Name", cl
+														.get(temp).getName());
 
 												startActivity(myIntent);
 											} catch (ClassNotFoundException e) {
