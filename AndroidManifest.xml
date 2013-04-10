@@ -40,7 +40,8 @@
             android:name="edu.vu.augmented.reality.HistoryActivity"
             android:label="@string/title_activity_history" >
         </activity>
-        <activity android:name="edu.vu.augmented.reality.linkedin.Init" >
+        <activity android:name="edu.vu.augmented.reality.linkedin.Init"
+            	  android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

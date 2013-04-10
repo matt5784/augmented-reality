@@ -216,6 +216,8 @@ public class CameraActivity extends Activity {
 			Toast timeDisplay = Toast.makeText(getApplicationContext(), "Execution time(ms): " + Long.toString(endTime - startTime), Toast.LENGTH_SHORT);
 			timeDisplay.setGravity(Gravity.BOTTOM, 0, 0);
 			timeDisplay.show();
+			
+			mCamera.startPreview(); //Don't delete this line!!! If you do, the preview doesn't restart and the user will have to exit the activity
 		}
 
 	};

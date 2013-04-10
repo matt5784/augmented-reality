@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -56,6 +57,10 @@ public class Init extends Activity {
 
 	private SharedPreferences mPrefs;
 
+	OAuthService s;
+	Token requestToken;
+	String authURL;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,9 +68,11 @@ public class Init extends Activity {
 
 		// This is a fix to allow network code to run on the main thread
 		// The code to authenticate should be placed inside an AsyncTask
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+		//Not usable for API < 8
+		/*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
+		*/
 
 		final WebView webView = (WebView) findViewById(R.id.wv1);
 
@@ -73,23 +80,23 @@ public class Init extends Activity {
 		// that we don't always have to load the webview
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean prefToken = mPrefs.getBoolean("AccessToken", false);
-		
-		//Grab the name from the intent passed in by HistoryActivity
+
+		// Grab the name from the intent passed in by HistoryActivity
 		Intent fromHistoryActivity = getIntent();
 		final String name = fromHistoryActivity.getStringExtra("Name");
 
 		if (!prefToken) {
 
-			// used to build our OAuthService
-			final OAuthService s = new ServiceBuilder()
-					.provider(LinkedInApi.class).apiKey(APIKEY)
+			// new runNetworkCode().execute();
+
+			s = new ServiceBuilder().provider(LinkedInApi.class).apiKey(APIKEY)
 					.apiSecret(APISECRET).callback(CALLBACK).build();
 
 			// create the scribe and linkedin-j request token
-			final Token requestToken = s.getRequestToken();
+			requestToken = s.getRequestToken();
 			liToken = new LinkedInRequestToken(requestToken.getToken(),
 					requestToken.getSecret());
-			final String authURL = s.getAuthorizationUrl(requestToken);
+			authURL = s.getAuthorizationUrl(requestToken);
 
 			// Since call backs don't seem to work, we can create a webview
 			// where the
@@ -167,6 +174,24 @@ public class Init extends Activity {
 				e.printStackTrace();
 			}
 
+		}
+
+	}
+
+	private class runNetworkCode extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected Void doInBackground(String... arg0) {
+			// used to build our OAuthService
+			s = new ServiceBuilder().provider(LinkedInApi.class).apiKey(APIKEY)
+					.apiSecret(APISECRET).callback(CALLBACK).build();
+
+			// create the scribe and linkedin-j request token
+			requestToken = s.getRequestToken();
+			liToken = new LinkedInRequestToken(requestToken.getToken(),
+					requestToken.getSecret());
+			authURL = s.getAuthorizationUrl(requestToken);
+			return null;
 		}
 
 	}
