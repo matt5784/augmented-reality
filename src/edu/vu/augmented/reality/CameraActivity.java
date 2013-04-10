@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -32,7 +33,6 @@ public class CameraActivity extends Activity {
 	private static String LOGTAG = "augmented-reality";
 	private Camera mCamera;
 	private CameraPreview mPreview;
-	private byte[] pictureData;
 
 	private Timer cameraTimer;
 
@@ -118,11 +118,18 @@ public class CameraActivity extends Activity {
 	}
 	
 	private void setCameraParams() {
+		
 		Camera.Parameters cp = mCamera.getParameters();
+		
 		List<Camera.Size> sizes = cp.getSupportedPreviewSizes();
-		cp.setPreviewSize(sizes.get(sizes.size() - 1).width,
-				sizes.get(sizes.size() - 1).height);
+		int viewWidth = sizes.get(sizes.size() - 1).width;
+		int viewHeight = sizes.get(sizes.size() - 1).height;
+		cp.setPreviewSize(viewWidth, viewHeight);
+		cp.setPictureSize(viewWidth, viewHeight);
+		
 		cp.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+		cp.setPictureFormat(ImageFormat.JPEG);
+		cp.setJpegQuality(100);
 		mCamera.setParameters(cp);
 	}
 
@@ -178,13 +185,13 @@ public class CameraActivity extends Activity {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 
+			long startTime = System.currentTimeMillis();
+			
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 			options.inSampleSize = 2;
 
 			Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-			
-			//Bitmap myBitmap = unconvertedBitmap.copy(Bitmap.Config.ARGB_8888,	true);
 
 			tess.clear();
 			tess.setImage(myBitmap);
@@ -194,6 +201,7 @@ public class CameraActivity extends Activity {
 			String textPhone = parser.getPhone();
 			String textWeb = parser.getURL();
 			String textName = parser.getPersonName();
+			
 			Toast.makeText(getApplicationContext(), "Email: " + textEmail +
 			 "\nPhone: " + textPhone + "\nWeb: " + textWeb + "\nName: " + textName,
 			 Toast.LENGTH_SHORT).show();
@@ -203,7 +211,11 @@ public class CameraActivity extends Activity {
 			
 			databaseHandler.addContact(new Contact(textName, textPhone, textEmail, textWeb));
 			
-			mCamera.startPreview(); //restart the preview
+			// Tracking execution time
+			long endTime = System.currentTimeMillis();
+			Toast timeDisplay = Toast.makeText(getApplicationContext(), "Execution time(ms): " + Long.toString(endTime - startTime), Toast.LENGTH_SHORT);
+			timeDisplay.setGravity(Gravity.BOTTOM, 0, 0);
+			timeDisplay.show();
 		}
 
 	};

@@ -71,7 +71,7 @@ public class Contact {
  
     // Set email address
     public void setEmailAddress(String email_address){
-        this._phone_number = email_address;
+        this._email_address = email_address;
     }
     
     // Get web address
