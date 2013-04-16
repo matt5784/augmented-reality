@@ -61,7 +61,7 @@ public class CameraActivity extends Activity {
         }
     }
     
-    private void takePicture(){
+    public void takePicture(View v){
         mCamera.autoFocus(new Camera.AutoFocusCallback() {
             
             @Override
@@ -77,17 +77,7 @@ public class CameraActivity extends Activity {
         super.onResume();
         if (checkCameraHardware(this)) {
             setContentView(R.layout.activity_camera);
-            img_cap = (Button) findViewById(R.id.img_button);
-
-            // Have this button perform the image capture
-            img_cap.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    takePicture();
-                }
-            });
-
+            
             // Create an instance of Camera
             mCamera = getCameraInstance();
             if (mCamera == null) {

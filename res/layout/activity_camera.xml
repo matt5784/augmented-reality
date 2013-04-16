@@ -17,12 +17,6 @@
             android:layout_height="fill_parent"
             android:orientation="horizontal" 
             android:onClick="takePicture"  >
-
-            <Button
-                android:id="@+id/img_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Capture" />
         </LinearLayout>
     </FrameLayout>
 
