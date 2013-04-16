@@ -43,7 +43,7 @@ public class Launcher extends Activity {
                 switch (position){
                 case 0: startActivity(new Intent(getApplicationContext(), CameraActivity.class)); break;
                 case 1: startActivity(new Intent(getApplicationContext(), HistoryActivity.class)); break;
-                case 2: break;
+                case 2: startActivity(new Intent(getApplicationContext(), Options.class)); break;
                 }
             }
         });
