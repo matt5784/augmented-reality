@@ -15,14 +15,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="This is an overlay"
-                android:textColor="#ff0000"
-                android:textSize="25dp" />
+            android:orientation="horizontal" 
+            android:onClick="takePicture"  >
 
             <Button
                 android:id="@+id/img_button"
