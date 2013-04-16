@@ -95,8 +95,8 @@ public class Launcher extends Activity {
 
         // references to our images
         private Integer[] mThumbIds = {
-        		R.drawable.ic_launcher_cam, R.drawable.ic_launcher_docs,
-        		R.drawable.ic_launcher_search, 
+        		R.drawable.seniordesignnewscan, R.drawable.seniordesignhistory,
+        		R.drawable.seniordesignsettings, 
         };
     }
     
