@@ -38,7 +38,7 @@ public class CameraActivity extends Activity {
     private CardParser parser;
     private DatabaseHandler databaseHandler;
 
-    private Button img_cap;
+ 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

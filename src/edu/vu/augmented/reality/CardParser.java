@@ -55,7 +55,7 @@ public class CardParser {
 	// Returns a person's name
 	public String getPersonName(){
 			
-		return getPattern(regexPersonName2);
+		return getPattern(regexPersonName);
 	}
 	
 	// Returns the first occurrence of a particular regular expression match or "" if not found
