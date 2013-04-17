@@ -17,6 +17,15 @@
             android:layout_height="fill_parent"
             android:orientation="horizontal" 
             android:onClick="takePicture"  >
+            
+            <TextView android:id="@+id/helptext" 
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:textSize="25dp"
+                android:textColor="#FFFFFF"
+                android:text="Tap anywhere to capture image"
+                android:gravity="center" />"
+            
         </LinearLayout>
     </FrameLayout>
 

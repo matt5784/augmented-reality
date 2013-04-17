@@ -18,8 +18,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class CameraActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
     }
 
     @Override
@@ -77,6 +79,32 @@ public class CameraActivity extends Activity {
         super.onResume();
         if (checkCameraHardware(this)) {
             setContentView(R.layout.activity_camera);
+            
+            final TextView helpText = (TextView) findViewById(R.id.helptext);
+            final Animation fade = new AlphaAnimation(1.0f, 0.0f);
+            fade.setDuration(2000);
+            
+            helpText.startAnimation(fade);
+            
+            fade.setAnimationListener(new AnimationListener() {
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    helpText.setText("");
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    // TODO Auto-generated method stub
+                    
+                }
+            });
             
             // Create an instance of Camera
             mCamera = getCameraInstance();
