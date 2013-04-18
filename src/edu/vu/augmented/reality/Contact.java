@@ -3,7 +3,7 @@
 package edu.vu.augmented.reality;
 
 public class Contact {
-	 
+     
     // Private variables
     private int _id;
     private String _name;
@@ -27,7 +27,7 @@ public class Contact {
  
     // Constructor without id
     public Contact(String _name, String _phone_number, String _email_address, String _web_address){
-    	//this._id = -1;
+        //this._id = -1;
         this._name = _name;
         this._phone_number = _phone_number;
         this._email_address = _email_address;

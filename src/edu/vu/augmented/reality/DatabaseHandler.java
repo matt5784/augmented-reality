@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-	 
+     
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -60,40 +60,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Delete all contacts
     public void deleteAll()
     {
-    	SQLiteDatabase db = this.getWritableDatabase();
-    	this.onUpgrade(db, DATABASE_VERSION, DATABASE_VERSION);
+        SQLiteDatabase db = this.getWritableDatabase();
+        this.onUpgrade(db, DATABASE_VERSION, DATABASE_VERSION);
     }
     
     // Add a new contact to database
     public void addContact(Contact contact) {
-    	
-    	SQLiteDatabase db = this.getWritableDatabase();
-    	 
+        
+        SQLiteDatabase db = this.getWritableDatabase();
+         
         ContentValues values = new ContentValues();
         
         // Name
         if (!(contact.getName() == ""))
-        	values.put(KEY_NAME, contact.getName());
+            values.put(KEY_NAME, contact.getName());
         else
-        	values.put(KEY_NAME, "-not available-");
+            values.put(KEY_NAME, "-not available-");
         
         // Phone number
         if (!(contact.getPhoneNumber() == ""))
-        	values.put(KEY_PH_NO, contact.getPhoneNumber());
+            values.put(KEY_PH_NO, contact.getPhoneNumber());
         else
-        	values.put(KEY_PH_NO, "-not available-");
+            values.put(KEY_PH_NO, "-not available-");
         
         // Email
         if (!(contact.getEmailAddress() == ""))
-        	values.put(KEY_EMAIL, contact.getEmailAddress());
+            values.put(KEY_EMAIL, contact.getEmailAddress());
         else
-        	values.put(KEY_EMAIL, "-not available-");
+            values.put(KEY_EMAIL, "-not available-");
         
         // Web address
         if (!(contact.getWebAddress() == ""))
-        	values.put(KEY_WEB, contact.getWebAddress());
+            values.put(KEY_WEB, contact.getWebAddress());
         else
-        	values.put(KEY_WEB, "-not available-");
+            values.put(KEY_WEB, "-not available-");
      
         // Inserting Row
         db.insert(TABLE_CONTACTS, null, values);
@@ -102,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      
     // Get a single contact based on ID
     public Contact getContact(int id) {
-    	
+        
         SQLiteDatabase db = this.getReadableDatabase();
         
         Cursor cursor = db.query(TABLE_CONTACTS, new String[] { KEY_ID,
@@ -121,7 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      
     // Get all contacts
     public List<Contact> getAllContacts() {
-    	
+        
         List<Contact> contactList = new ArrayList<Contact>();
         String selectQuery = "SELECT  * FROM " + TABLE_CONTACTS;
      
@@ -149,14 +149,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     
     // Get last #n contacts
     public List<Contact> getLastNContacts(int n) {
-    	
-    	List<Contact> contactList = new ArrayList<Contact>();
+        
+        List<Contact> contactList = new ArrayList<Contact>();
         //String selectQuery = "SELECT TOP " + Integer.toString(n) + " * FROM " + TABLE_CONTACTS;
-    	String selectQuery = "SELECT * FROM " + TABLE_CONTACTS + 
-    			" ORDER BY " + KEY_ID + " DESC LIMIT 0," + Integer.toString(n);
+        String selectQuery = "SELECT * FROM " + TABLE_CONTACTS + 
+                " ORDER BY " + KEY_ID + " DESC LIMIT 0," + Integer.toString(n);
         
         if (n <= 0)
-        	return contactList;
+            return contactList;
         
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -181,7 +181,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      
     // Get total number of contacts in database
     public int getContactsCount() {
-    	
+        
         String countQuery = "SELECT  * FROM " + TABLE_CONTACTS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
@@ -194,8 +194,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     
     // No need to implement
     public int updateContact(Contact contact) {
-    	
-    	/*
+        
+        /*
         SQLiteDatabase db = this.getWritableDatabase();
         
         ContentValues values = new ContentValues();
@@ -205,13 +205,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // updating row
         return db.update(TABLE_CONTACTS, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(contact.getID()) });
-    	*/
-    	return -1;
+        */
+        return -1;
     }
      
     // Delete a single contact
     public void deleteContact(Contact contact) {
-    	
+        
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONTACTS, KEY_ID + " = ?",
                 new String[] { String.valueOf(contact.getID()) });

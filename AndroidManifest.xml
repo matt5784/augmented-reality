@@ -44,8 +44,9 @@
             android:name="edu.vu.augmented.reality.Options"
             android:label="Options" >
         </activity>
-        <activity android:name="edu.vu.augmented.reality.linkedin.Init"
-            	  android:noHistory="true" >
+        <activity
+            android:name="edu.vu.augmented.reality.linkedin.Init"
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -56,6 +57,10 @@
             </intent-filter>
         </activity>
         <activity android:name="edu.vu.augmented.reality.linkedin.Interface" >
+        </activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/title_activity_detail" >
         </activity>
     </application>
 

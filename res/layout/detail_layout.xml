@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout android:layout_height="0dp" 
+    android:layout_width="fill_parent"
+    android:layout_weight="25"
+    android:orientation="horizontal"
+    >
+        <TextView android:id="@+id/nameanchor"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:text="Name:  " />
+        
+        <TextView android:id="@+id/detailname" 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:hint="Loading..."
+        android:layout_toRightOf="@+id/nameanchor" />
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_height="0dp" 
+    android:layout_width="fill_parent"
+    android:layout_weight="25"
+    android:orientation="horizontal"
+    >
+        <TextView android:id="@+id/phoneanchor"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:text="Phone:  " />
+        
+        <TextView android:id="@+id/detailphone" 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:hint="Loading..."
+        android:layout_toRightOf="@+id/phoneanchor" />
+    </RelativeLayout>    
+    
+    <RelativeLayout android:layout_height="0dp" 
+    android:layout_width="fill_parent"
+    android:layout_weight="25"
+    android:orientation="horizontal"
+    >
+        <TextView android:id="@+id/webanchor"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:text="Web:  " />
+        
+        <TextView android:id="@+id/detailweb" 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:hint="Loading..."
+        android:layout_toRightOf="@+id/webanchor" />
+        
+        <Button
+            android:id="@+id/webbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Visit Website" />
+        
+    </RelativeLayout>    
+    
+    <RelativeLayout android:layout_height="0dp" 
+    android:layout_width="fill_parent"
+    android:layout_weight="25"
+    android:orientation="horizontal"
+    >
+        <TextView android:id="@+id/emailanchor"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:text="Email:  " />
+        
+        <TextView android:id="@+id/detailemail" 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="#FFFFFF"
+        android:hint="Loading..."
+        android:layout_toRightOf="@+id/emailanchor" />
+
+        <Button
+            android:id="@+id/linkedinbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Linkedin" />
+        </RelativeLayout>
+</LinearLayout>

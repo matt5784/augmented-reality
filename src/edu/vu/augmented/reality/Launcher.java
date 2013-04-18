@@ -26,8 +26,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class Launcher extends Activity {
-	GridView gridView;
-	private static String LOGTAG = "augmented-reality";
+    GridView gridView;
+    private static String LOGTAG = "augmented-reality";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,57 +95,57 @@ public class Launcher extends Activity {
 
         // references to our images
         private Integer[] mThumbIds = {
-        		R.drawable.seniordesignnewscandarkernoglare, R.drawable.seniordesignhistorydarkernoglare,
-        		R.drawable.seniordesignsettingsdarkernoglare, 
+                R.drawable.seniordesignnewscandarkernoglare, R.drawable.seniordesignhistorydarkernoglare,
+                R.drawable.seniordesignsettingsdarkernoglare, 
         };
     }
     
     public boolean loadTesseractData() {
-    	
-		File sdCard = getExternalFilesDir(Environment.MEDIA_MOUNTED);
-		File tessFolder = new File(sdCard.getAbsolutePath() + File.separator + "tessdata");
-		
-    	//File base = getDir("augmented-reality", MODE_WORLD_READABLE);
-    	//File tessFolder = new File(base.getAbsolutePath() + "/tessdata/");
-    	
-    	if (!tessFolder.exists()) {
-    		
-    		if (!tessFolder.mkdirs()) {
-    			
-    			Log.e(LOGTAG, "Cannot create folder for tesseract training data");
-    			return false;
-    		}
-    	}
-    	
-    	File tessData = new File(tessFolder.getAbsolutePath() + File.separator + "eng.traineddata");
-    	if (!tessData.exists() || tessData.length() <= 0) {
-    		
-    		try {
-    			
-    			AssetManager assetManager = getAssets();
-    			InputStream in = assetManager.open("tessdata" + File.separator + "eng_traineddata.mp3");
-    			OutputStream out = new FileOutputStream(tessData.getAbsoluteFile());
-    			
-    			byte buf[] = new byte[512];
-    			int bytesRead = in.read(buf);
-    			while (bytesRead > 0) {
-    				
-    				out.write(buf, 0, bytesRead);
-    				bytesRead = in.read(buf);
-    			}
-    			
-    			in.close();
-    			out.close();
-    			
-    		} catch (Exception e) {
-    			
-    			Log.e(LOGTAG, "Unable to store tesseract training data; error below");
-    			Log.e(LOGTAG, e.getLocalizedMessage());
-    			return false;
-    		}
-    	}
-    	
-    	Log.d(LOGTAG, "Tesseract training data loaded successfully");
-    	return true;
+        
+        File sdCard = getExternalFilesDir(Environment.MEDIA_MOUNTED);
+        File tessFolder = new File(sdCard.getAbsolutePath() + File.separator + "tessdata");
+        
+        //File base = getDir("augmented-reality", MODE_WORLD_READABLE);
+        //File tessFolder = new File(base.getAbsolutePath() + "/tessdata/");
+        
+        if (!tessFolder.exists()) {
+            
+            if (!tessFolder.mkdirs()) {
+                
+                Log.e(LOGTAG, "Cannot create folder for tesseract training data");
+                return false;
+            }
+        }
+        
+        File tessData = new File(tessFolder.getAbsolutePath() + File.separator + "eng.traineddata");
+        if (!tessData.exists() || tessData.length() <= 0) {
+            
+            try {
+                
+                AssetManager assetManager = getAssets();
+                InputStream in = assetManager.open("tessdata" + File.separator + "eng_traineddata.mp3");
+                OutputStream out = new FileOutputStream(tessData.getAbsoluteFile());
+                
+                byte buf[] = new byte[512];
+                int bytesRead = in.read(buf);
+                while (bytesRead > 0) {
+                    
+                    out.write(buf, 0, bytesRead);
+                    bytesRead = in.read(buf);
+                }
+                
+                in.close();
+                out.close();
+                
+            } catch (Exception e) {
+                
+                Log.e(LOGTAG, "Unable to store tesseract training data; error below");
+                Log.e(LOGTAG, e.getLocalizedMessage());
+                return false;
+            }
+        }
+        
+        Log.d(LOGTAG, "Tesseract training data loaded successfully");
+        return true;
     }
 }

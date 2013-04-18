@@ -42,20 +42,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-    	// we are currently previewing
-    			if (mHolder.getSurface() != null) {
-    				mCamera.stopPreview();
-    			}
+        // we are currently previewing
+                if (mHolder.getSurface() != null) {
+                    mCamera.stopPreview();
+                }
 
-    			if (mCamera != null) {
-    				try {
-    					mCamera.setPreviewDisplay(mHolder);
-    					mCamera.startPreview();
-    				} catch (IOException e) {
-    					Toast.makeText(this.getContext(),
-    							"Error occured when restarting review",
-    							Toast.LENGTH_SHORT).show();
-    				}
-    			}
+                if (mCamera != null) {
+                    try {
+                        mCamera.setPreviewDisplay(mHolder);
+                        mCamera.startPreview();
+                    } catch (IOException e) {
+                        Toast.makeText(this.getContext(),
+                                "Error occured when restarting review",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
     }
 }
