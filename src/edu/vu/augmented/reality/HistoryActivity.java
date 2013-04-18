@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class HistoryActivity extends Activity {
 
-    private int numCardsToDisplay = 5;
+    private int numCardsToDisplay = 30;
 
     // Get assigned in the onCreate() method
     private DatabaseHandler databaseHandler;
@@ -61,8 +61,7 @@ public class HistoryActivity extends Activity {
             tv.setText("Name: " + cl.get(i).getName() + "\nPhone: "
                     + cl.get(i).getPhoneNumber() + "\nEmail: "
                     + cl.get(i).getEmailAddress() + "\nWeb: "
-                    + cl.get(i).getWebAddress() + "\nID(testing): "
-                    + cl.get(i).getID());
+                    + cl.get(i).getWebAddress());
 
             // allow each contact to be clicked to prompt the user if they want
             // to search for
