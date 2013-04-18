@@ -8,19 +8,21 @@
     <ImageView
         android:id="@+id/img_linkedin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/linkedin" />
+        android:layout_height="0dp"
+        android:src="@drawable/linkedin" 
+        android:layout_weight="23" />
 
     <ScrollView
         android:id="@+id/history_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="17"
          >
 
         <LinearLayout
             android:id="@+id/linkedin_interface_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:baselineAligned="false"
             android:gravity="top|center_horizontal"
             android:orientation="vertical"
@@ -30,5 +32,11 @@
             android:paddingTop="10dp" >
         </LinearLayout>
     </ScrollView>
+    
+    <ListView
+        android:id="@android:id/list"
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_weight="60" />
 
 </LinearLayout>

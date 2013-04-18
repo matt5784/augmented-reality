@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,7 +22,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.style.ImageSpan;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.code.linkedinapi.client.AsyncLinkedInApiClient;
@@ -35,7 +41,7 @@ import com.google.code.linkedinapi.schema.Person;
 
 import edu.vu.augmented.reality.R;
 
-public class Interface extends Activity {
+public class Interface extends ListActivity {
 
 	// DO NOT CHANGE
 	private final static String APIKEY = "dj4b9ihlwnkv";
@@ -49,6 +55,8 @@ public class Interface extends Activity {
 
 	private LinearLayout baseLayout;
 	private TextView tv_user;
+	//private ListView listView;
+	private PersonAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle state) {
@@ -57,6 +65,8 @@ public class Interface extends Activity {
 		setContentView(R.layout.linkedin_interface);
 		baseLayout = (LinearLayout) findViewById(R.id.linkedin_interface_layout);
 
+		//listView = (ListView)findViewById(R.id.linkedin_listview);
+		
 		Intent intentFromInit = getIntent();
 
 		// All of these extras come from Init
@@ -122,18 +132,26 @@ public class Interface extends Activity {
 
 			persons = bus_card_user.get(); // this is a blocking call
 			List<Person> pep_list = persons.getPersonList();
+			
+			String[] people = new String[pep_list.size()];
+			int i = 0;
 			for (Person p : pep_list) {
 				TextView tv = new TextView(this);
 				// ImageSpan imgV = null;
 				// String picUrl = p.getPictureUrl();
 
 				// setPic(picUrl, imgV, tv);
-				tv.setTextColor(Color.BLACK);
+/*				tv.setTextColor(Color.BLACK);
 				tv.setPadding(0, 15, 0, 15);
 				tv.setText("Name: " + p.getFirstName() + " " + p.getLastName());
 
-				baseLayout.addView(tv);
+				baseLayout.addView(tv);*/
+				people[i] = p.getFirstName() + " " + p.getLastName();
+				i++;
 			}
+			adapter = new PersonAdapter(this, people);
+			setListAdapter(adapter);
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -198,6 +216,28 @@ public class Interface extends Activity {
 				.getSharedPreferences("Options", MODE_PRIVATE);
 		return mPrefs.getBoolean("Demo", false);
 
+	}
+	
+	class PersonAdapter extends ArrayAdapter<String> {
+		Activity context;
+		String[] people;
+		
+		PersonAdapter(Activity context, String[] adapterInput){
+			super(context, R.layout.row, adapterInput);
+			this.context = context;
+			people = adapterInput;
+		}
+		
+		public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater=context.getLayoutInflater();
+            convertView=inflater.inflate(R.layout.row, null);
+			
+            ((TextView) convertView.findViewById(R.id.tvtitle)).setText(people[position]);
+            ((ImageView) convertView.findViewById(R.id.image)).setImageResource(R.drawable.icon_no_photo);
+            
+			return convertView;
+		}
+		
 	}
 
 }
