@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +41,22 @@ public class DetailActivity extends Activity {
         
         Button webButton = (Button) findViewById(R.id.webbutton);
         
+        Button contactButton = (Button) findViewById(R.id.contactbutton);
+        
+        contactButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i_contact = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
+				i_contact.putExtra(Contacts.Intents.Insert.NAME, thisName);
+				i_contact.putExtra(Contacts.Intents.Insert.EMAIL, thisEmail);
+				i_contact.putExtra(Contacts.Intents.Insert.PHONE, thisPhone);
+				
+				startActivity(i_contact);
+			}
+		});
+        
+        
         webButton.setOnClickListener(new View.OnClickListener() {
             
             @Override
@@ -52,9 +69,9 @@ public class DetailActivity extends Activity {
                 		currentUrl = "http://" + currentUrl;
                 	}
                 	
-                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl));
+                    Intent i_web = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl));
                     try {
-                    	startActivity(i);
+                    	startActivity(i_web);
                     } catch (ActivityNotFoundException e){
                     	Toast.makeText(getApplicationContext(), "Sorry, the web address appears to be invalid.", Toast.LENGTH_LONG).show();
                     }
