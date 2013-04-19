@@ -3,8 +3,10 @@ package edu.vu.augmented.reality.linkedin;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -28,14 +30,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.code.linkedinapi.client.AsyncLinkedInApiClient;
+import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientFactory;
+import com.google.code.linkedinapi.client.Parameter;
+import com.google.code.linkedinapi.client.constant.LanguageCodes;
+import com.google.code.linkedinapi.client.constant.RelationshipCodes;
 import com.google.code.linkedinapi.client.enumeration.ProfileField;
 import com.google.code.linkedinapi.client.enumeration.SearchParameter;
 import com.google.code.linkedinapi.client.oauth.LinkedInAccessToken;
+import com.google.code.linkedinapi.schema.FacetType;
 import com.google.code.linkedinapi.schema.People;
 import com.google.code.linkedinapi.schema.Person;
 
@@ -50,13 +56,17 @@ public class Interface extends ListActivity {
 
 	private String sec, tok, name;
 	AsyncLinkedInApiClient client;
+	LinkedInApiClient client1;
 	LinkedInApiClientFactory factory = LinkedInApiClientFactory.newInstance(
 			APIKEY, APISECRET);
 
 	private LinearLayout baseLayout;
 	private TextView tv_user;
-	//private ListView listView;
+	// private ListView listView;
 	private PersonAdapter adapter;
+	private Bitmap[] profile_pics;
+
+	private Map<SearchParameter, String> searchParams;
 
 	@Override
 	protected void onCreate(Bundle state) {
@@ -65,31 +75,27 @@ public class Interface extends ListActivity {
 		setContentView(R.layout.linkedin_interface);
 		baseLayout = (LinearLayout) findViewById(R.id.linkedin_interface_layout);
 
-		//listView = (ListView)findViewById(R.id.linkedin_listview);
-		
+		// listView = (ListView)findViewById(R.id.linkedin_listview);
+
 		Intent intentFromInit = getIntent();
 
 		// All of these extras come from Init
 		sec = intentFromInit.getStringExtra("Secret");
 		tok = intentFromInit.getStringExtra("Token");
 
-		String fName, lName = null;
+		String fName = null, lName = null;
 
-		if (checkDemoPrefs()) {
-			name = intentFromInit.getStringExtra("Name");
-			String[] lineArray = name.split("\\s");
-			fName = lineArray[0];
-			lName = lineArray[1];
-		} else {
-			fName = "Matthew";
-			lName = "Lavin";
-		}
+		name = intentFromInit.getStringExtra("Name");
+		String[] lineArray = name.split("\\s");
+		fName = lineArray[0];
+		lName = lineArray[1];
 
 		LinkedInAccessToken accessToken = new LinkedInAccessToken(tok, sec);
 
 		client = factory.createAsyncLinkedInApiClient(accessToken);
+		client1 = factory.createLinkedInApiClient(accessToken);
 
-		//allows the API to retrieve all parts of the ProfileField
+		// allows the API to retrieve all parts of the ProfileField
 		Future<Person> me_future = client.getProfileForCurrentUser(EnumSet
 				.allOf(ProfileField.class));
 		try {
@@ -118,7 +124,7 @@ public class Interface extends ListActivity {
 		}
 
 		// Map to hold the search parameters
-		Map<SearchParameter, String> searchParams = new HashMap<SearchParameter, String>();
+		searchParams = new HashMap<SearchParameter, String>();
 
 		// Define which search parameters we want to use. More can be added.
 		searchParams.put(SearchParameter.FIRST_NAME, fName);
@@ -126,37 +132,10 @@ public class Interface extends ListActivity {
 
 		// search for said user using our name we retrieved from Tesseract
 		// we will use Matt for the time being
-		Future<People> bus_card_user = client.searchPeople(searchParams);
-		People persons = null;
-		try {
 
-			persons = bus_card_user.get(); // this is a blocking call
-			List<Person> pep_list = persons.getPersonList();
-			
-			String[] people = new String[pep_list.size()];
-			int i = 0;
-			for (Person p : pep_list) {
-				TextView tv = new TextView(this);
-				// ImageSpan imgV = null;
-				// String picUrl = p.getPictureUrl();
+		// Future<People> bus_card_user = client.searchPeople(searchParams);
 
-				// setPic(picUrl, imgV, tv);
-/*				tv.setTextColor(Color.BLACK);
-				tv.setPadding(0, 15, 0, 15);
-				tv.setText("Name: " + p.getFirstName() + " " + p.getLastName());
-
-				baseLayout.addView(tv);*/
-				people[i] = p.getFirstName() + " " + p.getLastName();
-				i++;
-			}
-			adapter = new PersonAdapter(this, people);
-			setListAdapter(adapter);
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+		new linkedInSearch(this).execute();
 
 	}
 
@@ -176,6 +155,59 @@ public class Interface extends ListActivity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+	}
+
+	private class linkedInSearch extends AsyncTask<Void, Void, List<Person>> {
+		Activity context;
+
+		public linkedInSearch(Activity ctx) {
+			this.context = ctx;
+		}
+
+		@Override
+		protected List<Person> doInBackground(Void... arg0) {
+
+			People people = client1.searchPeople(searchParams,
+					EnumSet.allOf(ProfileField.class));
+			List<Person> my_people = people.getPersonList();
+
+			profile_pics = new Bitmap[my_people.size()];
+			int i = 0;
+			for (Person p : my_people) {
+				String url = p.getPictureUrl();
+				URL picURL;
+				Bitmap pic = null;
+				try {
+					picURL = new URL(url);
+					pic = BitmapFactory.decodeStream(picURL.openConnection()
+							.getInputStream());
+					profile_pics[i] = pic;
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				i++;
+			}
+
+			return my_people;
+
+		}
+
+		@Override
+		protected void onPostExecute(List<Person> pep_list) {
+			String[] people = new String[pep_list.size()];
+			int i = 0;
+			for (Person p : pep_list) {
+				people[i] = p.getFirstName() + " " + p.getLastName();
+				i++;
+			}
+
+			adapter = new PersonAdapter(context, people, profile_pics);
+			setListAdapter(adapter);
+
+		}
+
 	}
 
 	private class setPic extends AsyncTask<String, ImageSpan, Bitmap> {
@@ -217,27 +249,37 @@ public class Interface extends ListActivity {
 		return mPrefs.getBoolean("Demo", false);
 
 	}
-	
+
 	class PersonAdapter extends ArrayAdapter<String> {
 		Activity context;
 		String[] people;
-		
-		PersonAdapter(Activity context, String[] adapterInput){
+		Bitmap[] pro_pics;
+
+		PersonAdapter(Activity context, String[] adapterInput,
+				Bitmap[] profile_pics) {
 			super(context, R.layout.row, adapterInput);
 			this.context = context;
 			people = adapterInput;
+			pro_pics = profile_pics;
 		}
-		
+
 		public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater=context.getLayoutInflater();
-            convertView=inflater.inflate(R.layout.row, null);
-			
-            ((TextView) convertView.findViewById(R.id.tvtitle)).setText(people[position]);
-            ((ImageView) convertView.findViewById(R.id.image)).setImageResource(R.drawable.icon_no_photo);
-            
+			LayoutInflater inflater = context.getLayoutInflater();
+			convertView = inflater.inflate(R.layout.row, null);
+
+			((TextView) convertView.findViewById(R.id.tvtitle))
+					.setText(people[position]);
+
+			if (pro_pics[position] != null) {
+				((ImageView) convertView.findViewById(R.id.image))
+						.setImageBitmap(pro_pics[position]);
+			} else {
+				((ImageView) convertView.findViewById(R.id.image))
+						.setImageResource(R.drawable.icon_no_photo);
+			}
+
 			return convertView;
 		}
-		
 	}
 
 }
