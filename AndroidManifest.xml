@@ -45,6 +45,10 @@
             android:label="Options" >
         </activity>
         <activity
+            android:name="edu.vu.augmented.reality.DetailActivity"
+            android:label="Detail" >
+        </activity>
+        <activity
             android:name="edu.vu.augmented.reality.linkedin.Init"
             android:noHistory="true" >
             <intent-filter>
