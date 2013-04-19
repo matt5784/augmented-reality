@@ -83,17 +83,12 @@ public class Interface extends ListActivity {
 		sec = intentFromInit.getStringExtra("Secret");
 		tok = intentFromInit.getStringExtra("Token");
 
-		String fName, lName = null;
+		String fName = null, lName = null;
 
-		if (checkDemoPrefs()) {
-			name = intentFromInit.getStringExtra("Name");
-			String[] lineArray = name.split("\\s");
-			fName = lineArray[0];
-			lName = lineArray[1];
-		} else {
-			fName = "Matthew";
-			lName = "Lavin";
-		}
+		name = intentFromInit.getStringExtra("Name");
+		String[] lineArray = name.split("\\s");
+		fName = lineArray[0];
+		lName = lineArray[1];
 
 		LinkedInAccessToken accessToken = new LinkedInAccessToken(tok, sec);
 
@@ -138,7 +133,7 @@ public class Interface extends ListActivity {
 		// search for said user using our name we retrieved from Tesseract
 		// we will use Matt for the time being
 
-		//Future<People> bus_card_user = client.searchPeople(searchParams);
+		// Future<People> bus_card_user = client.searchPeople(searchParams);
 
 		new linkedInSearch(this).execute();
 
@@ -164,7 +159,7 @@ public class Interface extends ListActivity {
 
 	private class linkedInSearch extends AsyncTask<Void, Void, List<Person>> {
 		Activity context;
-		
+
 		public linkedInSearch(Activity ctx) {
 			this.context = ctx;
 		}
@@ -175,7 +170,7 @@ public class Interface extends ListActivity {
 			People people = client1.searchPeople(searchParams,
 					EnumSet.allOf(ProfileField.class));
 			List<Person> my_people = people.getPersonList();
-			
+
 			profile_pics = new Bitmap[my_people.size()];
 			int i = 0;
 			for (Person p : my_people) {
@@ -208,8 +203,7 @@ public class Interface extends ListActivity {
 				i++;
 			}
 
-			adapter = new PersonAdapter(context,
-					people, profile_pics);
+			adapter = new PersonAdapter(context, people, profile_pics);
 			setListAdapter(adapter);
 
 		}
@@ -275,13 +269,13 @@ public class Interface extends ListActivity {
 
 			((TextView) convertView.findViewById(R.id.tvtitle))
 					.setText(people[position]);
-			
+
 			if (pro_pics[position] != null) {
-			((ImageView) convertView.findViewById(R.id.image))
-					.setImageBitmap(pro_pics[position]);
+				((ImageView) convertView.findViewById(R.id.image))
+						.setImageBitmap(pro_pics[position]);
 			} else {
 				((ImageView) convertView.findViewById(R.id.image))
-				.setImageResource(R.drawable.icon_no_photo);
+						.setImageResource(R.drawable.icon_no_photo);
 			}
 
 			return convertView;
