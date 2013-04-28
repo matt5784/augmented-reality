@@ -1,8 +1,7 @@
 package edu.vu.augmented.reality;
 
-import java.util.regex.*;
-
-import android.util.Log;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CardParser {
     
@@ -58,7 +57,11 @@ public class CardParser {
         return getPattern(regexPersonName);
     }
     
-    // Returns the first occurrence of a particular regular expression match or "" if not found
+
+    /**
+     * @param regex The string being searched
+     * @return the first occurrence of a particular regular expression match or "" if not found
+     */
     private String getPattern(String regex){
         
         Pattern pattern = Pattern.compile(regex);

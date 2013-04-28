@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressWarnings({ "deprecation" })
 public class DetailActivity extends Activity {
 
     private String thisName;
@@ -44,17 +45,17 @@ public class DetailActivity extends Activity {
         Button contactButton = (Button) findViewById(R.id.contactbutton);
         
         contactButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent i_contact = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
-				i_contact.putExtra(Contacts.Intents.Insert.NAME, thisName);
-				i_contact.putExtra(Contacts.Intents.Insert.EMAIL, thisEmail);
-				i_contact.putExtra(Contacts.Intents.Insert.PHONE, thisPhone);
-				
-				startActivity(i_contact);
-			}
-		});
+            
+            @Override
+            public void onClick(View v) {
+                Intent i_contact = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
+                i_contact.putExtra(Contacts.Intents.Insert.NAME, thisName);
+                i_contact.putExtra(Contacts.Intents.Insert.EMAIL, thisEmail);
+                i_contact.putExtra(Contacts.Intents.Insert.PHONE, thisPhone);
+                
+                startActivity(i_contact);
+            }
+        });
         
         
         webButton.setOnClickListener(new View.OnClickListener() {
@@ -64,16 +65,16 @@ public class DetailActivity extends Activity {
                 if (thisWeb.equals("-not available-")){
                     Toast.makeText(getApplicationContext(), "Sorry, the web address is not available", Toast.LENGTH_SHORT).show();
                 } else {
-                	String currentUrl = thisWeb;
-                	if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) {
-                		currentUrl = "http://" + currentUrl;
-                	}
-                	
+                    String currentUrl = thisWeb;
+                    if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) {
+                        currentUrl = "http://" + currentUrl;
+                    }
+                    
                     Intent i_web = new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl));
                     try {
-                    	startActivity(i_web);
+                        startActivity(i_web);
                     } catch (ActivityNotFoundException e){
-                    	Toast.makeText(getApplicationContext(), "Sorry, the web address appears to be invalid.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Sorry, the web address appears to be invalid.", Toast.LENGTH_LONG).show();
                     }
                 }
             }

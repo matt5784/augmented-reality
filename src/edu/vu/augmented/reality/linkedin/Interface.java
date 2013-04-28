@@ -152,6 +152,11 @@ public class Interface extends ListActivity {
         super.onStop();
     }
 
+    /**
+     * This class is an AsyncTask which will search for the name on linkedin and 
+     * find First name, Last name, and profile pictures, if available, associated with it.
+     * It will also display a loading window while the search is being processed.  
+     */
     private class linkedInSearch extends AsyncTask<Void, Void, List<Person>> {
         Activity context;
 
@@ -249,6 +254,11 @@ public class Interface extends ListActivity {
 
     }
 
+    /**
+     * checkDemoPrefs: This method checks whether the demo mode is active. 
+     * Demo mode allows us to test the linkedin search even if we don't get a good read with tesseract. 
+     * @return true if demo mode is active, else false
+     */
     private boolean checkDemoPrefs() {
         SharedPreferences mPrefs = getApplicationContext()
                 .getSharedPreferences("Options", MODE_PRIVATE);
@@ -256,6 +266,10 @@ public class Interface extends ListActivity {
 
     }
 
+    /**
+     * This adapter class displays the results from the linkedin search in a listview
+     * @author Matthew
+     */
     class PersonAdapter extends ArrayAdapter<String> {
         Activity context;
         String[] people;

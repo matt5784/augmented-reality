@@ -9,12 +9,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-/** A basic Camera preview class */
+/** A basic Camera preview class 
+ * This class will use a SurfaceView to display a real-time feed from the camera */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private final static String TAG = "AugReality";
     
+    @SuppressWarnings("deprecation")
     public CameraPreview(Context context, Camera camera) {
         super(context);
         mCamera = camera;
